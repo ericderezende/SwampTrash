@@ -79,7 +79,7 @@ class App extends Component {
       for (var x = 0; x < this.state.selectedFile.length; x++) {
         data.append('file', this.state.selectedFile[x])
       }
-      axios.post("http://f4085f7f.ngrok.io/upload", data, {
+      axios.post("http://266b0a93.ngrok.io", data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
@@ -110,7 +110,7 @@ class App extends Component {
           let result, confidence;
           let outputJSON;
           axios.defaults.headers.common['Content-Type'] = "application/json";
-          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwcQsqzt1_DlC75kWKJPo-Gv1Y1nmx2H2ALME_AyhztJIdfKSM5MEGQnkZm6eCU2Zs3zsGMBNWDbtQGuK3JQbNDJrdWRBWTCLMKRAd6M6vQF1efdVsqtQk96UAzVN6ldeT-cCYQC5DdmdLxZ8q84tYRAx9X0EGsUoZbcQOqcyJYvFMWEzrUGPwtVn8pgAaE"
+          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwePf9FEL8-rhOHw-c4Y3p0fw4TRha8cJ8LB6lWx0fkV-avLXji6mLkXvdrP_XTImuE0pbHTqM6Vw8_rXuuqL6UVTai82y-sJG49TQCj5V_OdEH4saJ2VrXczjxw1VPXeNLpMe4NE76oSrDTSmg_wYUe6lCMMSnpb7Uus6cVViUZhGvD7Rr8UrKDaKz1DJ8"
           /* Copy token key here */;
 
           axios.post("https://automl.googleapis.com/v1beta1/projects/766644774605/locations/us-central1/models/ICN5802549470285529088:predict",
@@ -125,29 +125,29 @@ class App extends Component {
               if (Object.keys(res.data).length === 0) {
                 result = 'trash'
                 confidence = 99;
-              } else if(res.data.payload[0].classification.score > .50){
+              } else if (res.data.payload[0].classification.score > .50) {
                 result = res.data.payload[0].displayName;
                 confidence = res.data.payload[0].classification.score;
                 confidence = confidence * 100;
                 confidence = Math.round(confidence);
               }
-              else{
+              else {
                 result = "trash";
                 confidence = res.data.payload[0].classification.score;
                 confidence = confidence * 100;
                 confidence = Math.round(confidence);
-                }
-              
+              }
+
 
               let temp = {
                 "result": result,
                 "confidence": confidence
               };
               toast.info('I am ' + confidence + '% confident that this is ' + result + '.');
-              if(result=="trash"){
+              if (result == "trash") {
                 toast.warn('Throw your item in the trash!');
               }
-              else{
+              else {
                 toast.warn('Recycle your item!');
               }
               temp = JSON.stringify(temp);
@@ -172,7 +172,6 @@ class App extends Component {
   }
   render() {
     return (
-
       <div className="container">
         
           <h2>Trash Analyzer</h2>
@@ -196,6 +195,7 @@ class App extends Component {
           </div>
         </div>
       </div>
+
     );
   }
 }

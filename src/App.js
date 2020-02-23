@@ -50,7 +50,7 @@ class App extends Component {
   }
   checkFileSize = (event) => {
     let files = event.target.files
-    let size = 2000000
+    let size = 2000000000
     let err = [];
     for (var x = 0; x < files.length; x++) {
       if (files[x].size > size) {

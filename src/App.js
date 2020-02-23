@@ -4,7 +4,6 @@ import { Progress } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import base64 from 'react-native-base64'
-import Popup from 'react-popup';
 
 class App extends Component {
   constructor(props) {
@@ -80,7 +79,7 @@ class App extends Component {
       for (var x = 0; x < this.state.selectedFile.length; x++) {
         data.append('file', this.state.selectedFile[x])
       }
-      axios.post("http://localhost:8000/upload", data, {
+      axios.post("http://b69fbc8d.ngrok.io/upload", data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
@@ -111,7 +110,8 @@ class App extends Component {
           let result, confidence;
           let outputJSON;
           axios.defaults.headers.common['Content-Type'] = "application/json";
-          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwfGlwDRB8iHrgaYt220O9VZvxh64gyDtnUHGpWU_EUlvWoIuuQ3x8QAi-AP3ts3gxLYNvRPm0FO5iRAfmhp9TZqKOseCqjz8wXQodtii9sMceVUrhFXlbA4qejSQxv2gWkXHKpGi9p2Oc6LmDGsXsTnG-mZZmc_3sErpe6dYVB7Hgbi-PTPFSBFyr0vLRM"
+          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwckDnsxktSfnjM4qY8z0vqZtQRe1EhaWdyJwzWgHrRjHbGVm-YTDywuiGfml1PeUGg8MDaseJxQ8LRz9vDltvhyOrUV28F0K1i6-Yr8ZknaMfCrbsvK8tZ-WcdFdHlafCE4Nmybv6AMoZ4jlno-FjNp7yr8jnFG2BMJymx8_4mBb5ZwHWCFgmHa7D18c0Q"
+          
           /* Copy token key here */;
 
           axios.post("https://automl.googleapis.com/v1beta1/projects/766644774605/locations/us-central1/models/ICN5802549470285529088:predict",
@@ -126,18 +126,31 @@ class App extends Component {
               if (Object.keys(res.data).length === 0) {
                 result = 'trash'
                 confidence = 99;
-              } else {
+              } else if(res.data.payload[0].classification.score > .75){
                 result = res.data.payload[0].displayName;
                 confidence = res.data.payload[0].classification.score;
                 confidence = confidence * 100;
                 confidence = Math.round(confidence);
               }
+              else{
+                result = "trash";
+                confidence = res.data.payload[0].classification.score;
+                confidence = confidence * 100;
+                confidence = Math.round(confidence);
+                }
+              
 
               let temp = {
                 "result": result,
                 "confidence": confidence
               };
-              toast.info('I am ' + confidence + '% confident that this is '+result+'.');
+              toast.info('I am ' + confidence + '% confident that this is ' + result + '.');
+              if(result=="trash"){
+                toast.warn('Throw your item in the trash!');
+              }
+              else{
+                toast.warn('Recycle your item!');
+              }
               temp = JSON.stringify(temp);
 
               outputJSON = JSON.parse(temp);
@@ -160,14 +173,16 @@ class App extends Component {
   }
   render() {
     return (
+
       <div className="container">
-        <h1>
-          <center>Swamp Trash</center>
-        </h1>
+        
+          <h2>Trash Analyzer</h2>
+        
         <div className="row">
           <div className="offset-md-3 col-md-6">
+            <h5>Upload an image of your trash: </h5>
             <div className="form-group files">
-              <label>Upload Your File </label>
+
               <input type="file" className="form-control" multiple onChange={this.onChangeHandler} />
             </div>
             <div className="form-group">
@@ -187,3 +202,4 @@ class App extends Component {
 }
 
 export default App;
+

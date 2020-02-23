@@ -79,7 +79,7 @@ class App extends Component {
       for (var x = 0; x < this.state.selectedFile.length; x++) {
         data.append('file', this.state.selectedFile[x])
       }
-      axios.post("http://b69fbc8d.ngrok.io/upload", data, {
+      axios.post("http://f4085f7f.ngrok.io/upload", data, {
         onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
@@ -110,8 +110,7 @@ class App extends Component {
           let result, confidence;
           let outputJSON;
           axios.defaults.headers.common['Content-Type'] = "application/json";
-          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwckDnsxktSfnjM4qY8z0vqZtQRe1EhaWdyJwzWgHrRjHbGVm-YTDywuiGfml1PeUGg8MDaseJxQ8LRz9vDltvhyOrUV28F0K1i6-Yr8ZknaMfCrbsvK8tZ-WcdFdHlafCE4Nmybv6AMoZ4jlno-FjNp7yr8jnFG2BMJymx8_4mBb5ZwHWCFgmHa7D18c0Q"
-          
+          axios.defaults.headers.common['Authorization'] = "Bearer ya29.c.Ko8BvwcQsqzt1_DlC75kWKJPo-Gv1Y1nmx2H2ALME_AyhztJIdfKSM5MEGQnkZm6eCU2Zs3zsGMBNWDbtQGuK3JQbNDJrdWRBWTCLMKRAd6M6vQF1efdVsqtQk96UAzVN6ldeT-cCYQC5DdmdLxZ8q84tYRAx9X0EGsUoZbcQOqcyJYvFMWEzrUGPwtVn8pgAaE"
           /* Copy token key here */;
 
           axios.post("https://automl.googleapis.com/v1beta1/projects/766644774605/locations/us-central1/models/ICN5802549470285529088:predict",
@@ -126,7 +125,7 @@ class App extends Component {
               if (Object.keys(res.data).length === 0) {
                 result = 'trash'
                 confidence = 99;
-              } else if(res.data.payload[0].classification.score > .75){
+              } else if(res.data.payload[0].classification.score > .50){
                 result = res.data.payload[0].displayName;
                 confidence = res.data.payload[0].classification.score;
                 confidence = confidence * 100;
